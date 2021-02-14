@@ -483,10 +483,10 @@ class ProcTree {
 
 function plantPotSvg(pathAttr) {
   const baseCfg = {
-    rimHeight: 20,
+    rimHeight: 40,
     rimLipOuter: 2,
-    rimLipInner: 4,
-    bottom: 15
+    rimLipInner: 7,
+    bottom: 10
   };
   const sw = pathAttr ? 'stroke-width' in pathAttr ? pathAttr['stroke-width'] : 2 : false;
   if (sw) pathAttr['stroke-width'] = sw;
@@ -1362,27 +1362,27 @@ class BaseGenus {
 
 }
 
-class BushyPlantGenus extends BaseGenus {
+class CannabisGenus extends BaseGenus {
   constructor(rngSeed) {
     super(rngSeed);
-    this.width = 6.1;
-    this.height = 6.6;
-    this.maxBranchNum = 3;
+    this.width = 3.6;
+    this.height = 3.5;
+    this.maxBranchNum = 900;
     this.segmentStyle = {
-      fill: '#400',
-      stroke: '#931',
+      stroke: '#041',
+      fill: '#161',
       'stroke-width': .0075
     };
     this.leafStyle = {
       stroke: '#0d5',
       fill: 'rgba(0,255,110,.9)',
-      'stroke-width': .02
+      'stroke-width': .03
     };
     this.leafCurveHandles = {
-      bottomAngle: 60,
-      bottomLength: .6,
+      bottomAngle: 50,
+      bottomLength: .3,
       topAngle: 179,
-      topLength: .2
+      topLength: .1
     };
   }
 
@@ -1395,7 +1395,7 @@ class BushyPlantGenus extends BaseGenus {
 
   getOffshoots(node) {
     if (node.pos.isLast || node.pos.num == 0) return [];
-    const p = .5 * (.5 + .5 * node.pos.numFactor) * (.5 + .5 * node.pos.branchFactor);
+    const p = .9 * (.9 + .5 * node.pos.numFactor) * (.9 + .5 * node.pos.branchFactor);
     const a = [];
 
     const getNodeCount = () => 4 - node.pos.branchNum - this.rng.test(.6, 1, 0);
@@ -1417,7 +1417,7 @@ class BushyPlantGenus extends BaseGenus {
 
   getNodeWidth(pos, prev, _attr) {
     if (pos.isOffshoot && prev) return prev.attr.width;
-    return .1 * (.1 + .9 * pos.branchFactor);
+    return .1 * (.1 + .4 * pos.branchFactor);
   }
 
   getSegmentLength(pos, prev, _attr) {
@@ -1456,333 +1456,6 @@ class BushyPlantGenus extends BaseGenus {
     if (this.rng.test(.5)) addLeaf(1);
     if (this.rng.test(.5)) addLeaf(-1);
     return leaves;
-  }
-
-}
-
-class DragonTreeGenus extends BaseGenus {
-  constructor(rngSeed) {
-    super(rngSeed);
-    this.width = 10.3;
-    this.height = 8.6;
-    this.maxBranchNum = 1;
-    this.segmentStyle = {
-      fill: '#400',
-      stroke: '#931',
-      'stroke-width': .0075
-    };
-    this.leafStyle = {
-      stroke: '#0d5',
-      fill: 'rgba(0,255,110,.9)',
-      'stroke-width': .02
-    };
-    this.leafCurveHandles = {
-      bottomAngle: 30,
-      bottomLength: .2,
-      topAngle: 179,
-      topLength: .2
-    };
-  }
-
-  getRoots() {
-    return [{
-      n: this.rng.intRange(2, 4),
-      attr: plantHelper.rootPosAngle(this.rng, .5, 6)
-    }];
-  }
-
-  getOffshoots(node) {
-    if (!node.pos.isLast) return [];
-    const p = .75;
-    const steps = {
-      from: -60,
-      to: 60,
-      step: 30
-    };
-
-    const makeOffshoot = angle => {
-      return {
-        n: 2,
-        attr: {
-          segmentAngle: node.attr.angle + angle + this.rng.range(-10, 10)
-        }
-      };
-    };
-
-    const offshoots = plantHelper.repeat({
-      rng: this.rng,
-      steps,
-      p,
-      cb: makeOffshoot
-    });
-    if (!offshoots.length) offshoots.push({
-      n: 2,
-      attr: {
-        segmentAngle: this.rng.range(-60, 60)
-      }
-    });
-    return offshoots;
-  }
-
-  getNodeWidth(pos, prev, _attr) {
-    if (pos.isOffshoot && prev) return prev.attr.width;
-    if (pos.branchNum == 1) return this.rng.range(.2, .3);
-    return this.rng.range(.4, .6);
-  }
-
-  getSegmentLength(pos, _prev, _attr) {
-    if (pos.branchNum == 1) return this.rng.range(.2, .8);
-    return this.rng.range(.5, 1.5);
-  }
-
-  getSegmentAngle(pos, prev, _attr) {
-    return plantHelper.nextAngle(this.rng, pos, prev, 8, true);
-  }
-
-  getSegmentStyle(_n0, _n1) {
-    return this.segmentStyle;
-  }
-
-  getLeaves(_n0, n1) {
-    if (!n1.pos.isLast || n1.pos.branchNum != 1) return [];
-    const steps = {
-      from: -75,
-      to: 75,
-      step: 10
-    };
-    const p = .5;
-
-    const makeLeaf = angle => {
-      const av = this.rng.range(-5, 5);
-      const sv = this.rng.range(-.7, .7);
-      return {
-        angle: n1.attr.angle + angle + av,
-        length: 3.5 + sv,
-        handles: this.leafCurveHandles,
-        style: this.leafStyle,
-        xOffset: this.rng.range(-.2, .2),
-        yOffset: this.rng.range(.8, .95)
-      };
-    };
-
-    return plantHelper.repeat({
-      rng: this.rng,
-      steps,
-      p,
-      cb: makeLeaf
-    });
-  }
-
-}
-
-function ownKeys$1(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread$1(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys$1(Object(source), true).forEach(function (key) { defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys$1(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-class ZamiaGenus extends BaseGenus {
-  constructor(rngSeed) {
-    super(rngSeed);
-    this.width = 3.6;
-    this.height = 3.5;
-    this.maxBranchNum = 0;
-    this.segmentStyle = {
-      stroke: '#041',
-      fill: '#161',
-      'stroke-width': .0075
-    };
-    this.leafStyle = {
-      stroke: '#0d5',
-      fill: 'rgba(0,255,110,.9)',
-      'stroke-width': .01
-    };
-    this.leafCurveHandles = {
-      bottomAngle: 24,
-      bottomLength: .6,
-      topAngle: 179,
-      topLength: .2
-    };
-  }
-
-  getRoots() {
-    return plantHelper.repeat({
-      rng: this.rng,
-      n: [1, 3],
-      cb: () => {
-        return {
-          n: this.rng.intRange(5, 7),
-          attr: _objectSpread$1(_objectSpread$1({}, plantHelper.rootPosAngle(this.rng, .25, 15)), {}, {
-            branchArchAngle: this.rng.ranges([-30, -5], [5, 30])
-          })
-        };
-      }
-    });
-  }
-
-  getOffshoots(_node) {
-    return [];
-  }
-
-  getNodeWidth(_pos, prev, _attr) {
-    if (!prev) return .1;
-    return prev.attr.width * .8;
-  }
-
-  getSegmentLength(_pos, prev, _attr) {
-    if (!prev) return this.rng.range(.4, 1);
-    return prev.attr.length * this.rng.range(.6, .9);
-  }
-
-  getSegmentAngle(pos, prev, _attr) {
-    return plantHelper.archingBranchAngle(this.rng, pos, prev, 5, .6);
-  }
-
-  getSegmentStyle() {
-    return this.segmentStyle;
-  }
-
-  getLeaves(_n0, n1) {
-    const length = n1.treeRoot.attr.length * 1.2 * (.5 + .5 * Math.sin(Math.PI * n1.pos.numFactor));
-    const angles = n1.pos.isLast ? [-70, -30, 30, 70] : [-70, 70];
-    return plantHelper.repeat({
-      rng: this.rng,
-      values: angles,
-      p: .89,
-      cb: angle => {
-        const av = this.rng.range(-6, 6);
-        const lv = this.rng.range(-.1, .1);
-        const lf = Math.abs(angle) < 70 ? .9 : 1;
-        return {
-          angle: n1.attr.angle + angle + av,
-          length: length * lf + lv,
-          handles: this.leafCurveHandles,
-          style: this.leafStyle,
-          xOffset: 0,
-          yOffset: 1
-        };
-      }
-    });
-  }
-
-}
-
-class PileaGenus extends BaseGenus {
-  constructor(rngSeed) {
-    super(rngSeed);
-
-    defineProperty(this, "offshootSegmentStyle", void 0);
-
-    defineProperty(this, "branchSegmentStyle", void 0);
-
-    this.width = 4.6;
-    this.height = 4.1;
-    this.maxBranchNum = 1;
-    this.segmentStyle = {
-      stroke: '#931',
-      fill: '#400',
-      'stroke-width': .0075
-    };
-    this.offshootSegmentStyle = {
-      stroke: '#931',
-      fill: '#400',
-      'stroke-width': .0075
-    };
-    this.branchSegmentStyle = {
-      stroke: '#041',
-      fill: '#161',
-      'stroke-width': .0075
-    };
-    this.leafStyle = {
-      stroke: '#0d5',
-      fill: 'rgba(0,255,110,.9)',
-      'stroke-width': .02
-    };
-    this.leafCurveHandles = {
-      bottomAngle: 80,
-      bottomLength: 1,
-      topAngle: 100,
-      topLength: .2
-    };
-  }
-
-  getRoots() {
-    return [{
-      n: this.rng.intRange(0, 3),
-      attr: plantHelper.rootPosAngle(this.rng, .25, 8)
-    }];
-  }
-
-  getOffshoots(node) {
-    if (node.pos.isLast) return plantHelper.repeat({
-      rng: this.rng,
-      n: [1, 12],
-      cb: () => {
-        return {
-          n: this.rng.intRange(3, 6),
-          attr: {
-            segmentAngle: node.attr.angle + this.rng.range(-40, 40),
-            branchArchAngle: this.rng.ranges([-40, -5], [5, 40])
-          }
-        };
-      }
-    });
-    if (node.pos.num) return plantHelper.repeat({
-      rng: this.rng,
-      n: [0, 4],
-      cb: () => {
-        return {
-          n: this.rng.intRange(2, 3),
-          attr: {
-            segmentAngle: node.attr.angle + this.rng.ranges([-80, -40], [40, 80]),
-            branchArchAngle: this.rng.ranges([-40, -5], [5, 40])
-          }
-        };
-      }
-    });
-    return [];
-  }
-
-  getNodeWidth(pos, prev, _attr) {
-    if (pos.branchNum == 0) return this.rng.range(.1, .3);
-    if (pos.isOffshoot && prev !== null) return prev.attr.width;
-    return this.rng.range(.05, .1);
-  }
-
-  getSegmentLength(pos, prev, _attr) {
-    if (!prev) return this.rng.range(.6, 1.2);
-    if (pos.branchNum == 0) return prev.attr.length * .9;
-    if (pos.isOffshoot) return this.rng.range(.1, .2);
-
-    if (pos.num == 1) {
-      if (prev.branchRoot.pos.isLast) return this.rng.range(.6, 1.2);
-      return this.rng.range(.3, .6);
-    }
-
-    return prev.attr.length * .75;
-  }
-
-  getSegmentAngle(pos, prev, _attr) {
-    if (pos.branchNum == 0) return this.rng.range(-8, 8);
-    return plantHelper.archingBranchAngle(this.rng, pos, prev, 5, .1);
-  }
-
-  getSegmentStyle(n0, _n1) {
-    if (n0.pos.branchNum == 0) return this.segmentStyle;
-    if (n0.pos.isOffshoot) return this.offshootSegmentStyle;
-    return this.branchSegmentStyle;
-  }
-
-  getLeaves(n0, n1) {
-    if (!n1.pos.isLast || n1.pos.branchNum != 1) return [];
-    const length = (n1.treeRoot.attr.length || 1) * this.rng.range(.4, 1.5);
-    const angle = plantHelper.segmentAngle(n0) + this.rng.range(-8, 8);
-    return [{
-      angle,
-      length,
-      handles: this.leafCurveHandles,
-      style: this.leafStyle,
-      xOffset: 0,
-      yOffset: .96
-    }];
   }
 
 }
@@ -1876,19 +1549,13 @@ var DevTools = /*#__PURE__*/Object.freeze({
 });
 
 const Genera = {
-  'BushyPlant': BushyPlantGenus,
-  'DragonTree': DragonTreeGenus,
-  'Zamia': ZamiaGenus,
-  'Pilea': PileaGenus
+  'Cannabis': CannabisGenus
 };
 
 exports.BaseGenus = BaseGenus;
-exports.BushyPlantGenus = BushyPlantGenus;
+exports.CannabisGenus = CannabisGenus;
 exports.DevTools = DevTools;
-exports.DragonTreeGenus = DragonTreeGenus;
 exports.Genera = Genera;
-exports.PileaGenus = PileaGenus;
 exports.SvgPlant = SvgPlant;
-exports.ZamiaGenus = ZamiaGenus;
 exports.plantHelper = plantHelper;
 //# sourceMappingURL=svg-plant.cjs.js.map

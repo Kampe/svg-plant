@@ -1,32 +1,32 @@
 import { BaseGenus } from "./BaseGenus";
 import { plantHelper, node, nodePos, nodeAttr } from "../util/util";
-import { rngSeed, Genus, leafDefinition } from '../types';
+import { Genus, rngSeed } from '../types';
 
-class BushyPlantGenus extends BaseGenus implements Genus {
+class CannabisGenus extends BaseGenus implements Genus {
 
     constructor( rngSeed?: rngSeed ) {
         super( rngSeed );
 
-        this.width = 6.1;
-        this.height = 6.6;
-        this.maxBranchNum = 3;
+        this.width = 3.6;
+        this.height = 3.5;
+        this.maxBranchNum = 900;
 
         this.segmentStyle = {
-            fill: '#400',
-            stroke: '#931',
+            stroke: '#041',
+            fill: '#161',
             'stroke-width': .0075,
         };
 
         this.leafStyle = {
             stroke: '#0d5',
             fill: 'rgba(0,255,110,.9)',
-            'stroke-width': .02,
+            'stroke-width': .03
         };
         this.leafCurveHandles = {
-            bottomAngle: 60,
-            bottomLength: .6,
+            bottomAngle: 50,
+            bottomLength: .3,
             topAngle: 179,
-            topLength: .2,
+            topLength: .1
         };
     }
 
@@ -41,7 +41,7 @@ class BushyPlantGenus extends BaseGenus implements Genus {
     getOffshoots( node: node ) {
         if (node.pos.isLast || node.pos.num==0) return [];
 
-        const p = .5 * (.5 + .5 * node.pos.numFactor) * (.5 + .5 * node.pos.branchFactor);
+        const p = .9 * (.9 + .5 * node.pos.numFactor) * (.9 + .5 * node.pos.branchFactor);
         const a = [];
 
         const getNodeCount = () => 4 - node.pos.branchNum - this.rng.test( .6, 1, 0 );
@@ -65,7 +65,7 @@ class BushyPlantGenus extends BaseGenus implements Genus {
 
     getNodeWidth( pos: nodePos, prev: node | null, _attr: nodeAttr ) {
         if (pos.isOffshoot && prev) return prev.attr.width;
-        return .1 * (.1 + .9 * pos.branchFactor);
+        return .1 * (.1 + .4 * pos.branchFactor);
     }
     getSegmentLength( pos: nodePos, prev: node | null, _attr: nodeAttr ) {
         if (!prev) return 1;
@@ -110,4 +110,4 @@ class BushyPlantGenus extends BaseGenus implements Genus {
     }
 };
 
-export { BushyPlantGenus };
+export { CannabisGenus };

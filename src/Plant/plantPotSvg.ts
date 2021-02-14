@@ -10,10 +10,10 @@ interface PlantPotCfg {
 
 function plantPotSvg( pathAttr: attributeSet ): SVGElement {
     const baseCfg: PlantPotCfg = {
-        rimHeight: 20,
+        rimHeight: 40,
         rimLipOuter: 2,
-        rimLipInner: 4,
-        bottom: 15,
+        rimLipInner: 7,
+        bottom: 10
     };
 
     const sw = pathAttr ? ('stroke-width' in pathAttr ? pathAttr[ 'stroke-width' ] : 2) : false;
