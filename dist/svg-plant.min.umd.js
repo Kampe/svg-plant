@@ -2417,8 +2417,13 @@
       };
 
       if (n1.pos.isLast && this.rng.test(.5)) addLeaf(0);
+      if (n1.pos.isLast && this.rng.test(.5)) addLeaf(0);
       if (this.rng.test(.5)) addLeaf(1);
       if (this.rng.test(.5)) addLeaf(-1);
+      if (this.rng.test(.5)) addLeaf(2);
+      if (this.rng.test(.5)) addLeaf(-2);
+      if (this.rng.test(.5)) addLeaf(3);
+      if (this.rng.test(.5)) addLeaf(-3);
       return leaves;
     }
 
