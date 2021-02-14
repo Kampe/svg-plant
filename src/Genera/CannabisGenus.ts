@@ -4,7 +4,7 @@ import { Genus, rngSeed } from '../types';
 
 class CannabisGenus extends BaseGenus implements Genus {
 
-    constructor( rngSeed?: rngSeed ) {
+    constructor( rngSeed?: rngSeed, colorize: any) {
         super( rngSeed );
 
         this.width = 3.6;
@@ -18,7 +18,7 @@ class CannabisGenus extends BaseGenus implements Genus {
         };
 
         this.leafStyle = {
-            stroke: '#0d5',
+            stroke: colorize(rngSeed),
             fill: 'rgba(0,255,110,.9)',
             'stroke-width': .03
         };

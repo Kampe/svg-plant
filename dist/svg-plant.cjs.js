@@ -1363,7 +1363,7 @@ class BaseGenus {
 }
 
 class CannabisGenus extends BaseGenus {
-  constructor(rngSeed) {
+  constructor(rngSeed, colorize) {
     super(rngSeed);
     this.width = 3.6;
     this.height = 3.5;
@@ -1374,7 +1374,7 @@ class CannabisGenus extends BaseGenus {
       'stroke-width': .0075
     };
     this.leafStyle = {
-      stroke: '#0d5',
+      stroke: colorize(rngSeed),
       fill: 'rgba(0,255,110,.9)',
       'stroke-width': .03
     };
