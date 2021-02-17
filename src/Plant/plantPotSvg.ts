@@ -10,7 +10,7 @@ interface PlantPotCfg {
 
 function plantPotSvg( pathAttr: attributeSet ): SVGElement {
     const baseCfg: PlantPotCfg = {
-        rimHeight: 40,
+        rimHeight: 90,
         rimLipOuter: 2,
         rimLipInner: 7,
         bottom: 10
@@ -24,13 +24,13 @@ function plantPotSvg( pathAttr: attributeSet ): SVGElement {
     const getPoints = (cfg: PlantPotCfg): pathDescriptionSegment[] => {
         return [
             [ 'M', pad, pad ],
-            [ 'L', 100-pad, pad ],
-            [ 'L', 100-pad - cfg.rimLipOuter, cfg.rimHeight ],
-            [ 'L', 100-pad - cfg.rimLipInner, cfg.rimHeight ],
-            [ 'L', 100-pad - cfg.bottom, 100-pad ],
-            [ 'L', pad+cfg.bottom, 100-pad ],
-            [ 'L', pad+cfg.rimLipInner, cfg.rimHeight ],
-            [ 'L', pad+cfg.rimLipOuter, cfg.rimHeight ],
+            [ 'L', 100-pad, pad ], // top line
+            [ 'L', 100-pad - cfg.rimLipOuter, cfg.rimHeight ], // right side
+            // [ 'L', 100-pad - cfg.rimLipInner, cfg.rimHeight ], // right inseam for lip
+            [ 'L', 100-pad - cfg.bottom, 100-pad ], // bottom right corner
+            [ 'L', pad+cfg.bottom, 100-pad ], // left side
+            [ 'L', pad+cfg.rimLipOuter, cfg.rimHeight ], // left bottom verticle line
+            //['L', pad + cfg.rimLipOuter, cfg.rimHeight], // left inseam for lip
             'Z',
         ];
     };
